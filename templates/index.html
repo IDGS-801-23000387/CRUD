@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Página con Tailwind</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="bg-white border-b border-gray-300 fixed w-full z-10">
+        <div class="flex justify-between items-center px-6">
+            <!-- Ícono de Menú (cyan) -->
+            <button>
+                <i class="fas fa-bars text-black-500 text-lg"></i>
+            </button>
+            <!-- Logo (centrado) -->
+            <div class="mx-auto">
+                <h1 class="h-20 w-full py-3 text-5xl text-center font-bold flex items-center justify-center">
+                    
+                </h1>
+            </div>
+        </div>
+    </nav>
+    
+<br><br><br> 
+    <!-- Barra lateral fija -->
+    <div id="sidebar" class="w-16 bg-white h-screen fixed rounded-none border-none z-20">
+        <!-- Items -->
+        <div class="p-2 space-y-4">
+            <!-- Inicio -->
+            <button class="relative px-3 py-3 flex items-center space-x-4 justify-start text-gray-500 rounded-lg group">
+                <i class="fas fa-home text-lg"></i>
+                <span class="font-medium">Inicio</span>
+            </button>
+
+            <!-- Autorizaciones -->
+            <button class="relative px-3 py-3 flex items-center space-x-4 justify-start text-gray-500 rounded-lg group">
+                <i class="fas fa-check-circle"></i>
+                <span class="font-medium">Autorizaciones</span>
+            </button>
+
+            <!-- Usuarios -->
+            <button class="relative px-3 py-3 flex items-center space-x-4 justify-start text-gray-500 rounded-lg group">
+                <i class="fas fa-users"></i>
+                <span class="font-medium">Usuarios</span>
+            </button>
+
+            <!-- Comercios -->
+            <button class="relative px-3 py-3 flex items-center space-x-4 justify-start text-gray-500 rounded-lg group">
+                <i class="fas fa-store"></i>
+                <span class="font-medium">Comercios</span>
+            </button>
+
+            <!-- Transacciones -->
+            <button class="relative px-3 py-3 flex items-center space-x-4 justify-start text-gray-500 rounded-lg group">
+                <i class="fas fa-exchange-alt"></i>
+                <span class="font-medium">Transacciones</span>
+            </button>
+
+            <!-- Cerrar sesión -->
+            <button class="relative px-3 py-3 flex items-center space-x-4 justify-start text-gray-500 rounded-lg group">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="font-medium">Cerrar sesión</span>
+            </button>
+        </div>
+        
+    </div>
+    {% extends "layout.html" %}
+    {% block content %}
+    {% import "_macros.html" as macros %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    
+    <!-- Contenedor principal con margen superior -->
+    <div class="flex flex-col self-start"  >
+        <!-- Botón para abrir el modal de agregar -->
+       
+     
+        <div class="ml-33 w-full p-4 text-center bg-white border border-gray-300 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700  ">
+             <div class="flex justify-end" >
+            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
+                class="flex gap-2 text-white focus:outline-none bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-4 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                    <path d="M16 0H4a2 2 0 0 0-2 2v1H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v2H1a1 1 0 0 0 0 2h1v1a2 2 0 0 0 2 
+                    2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4.5a3 3 0 1 1 0 6 3 3 0 0 1 
+                    0-6ZM13.929 17H7.071a.5.5 0 0 1-.5-.5 3.935 3.935 0 1 1 7.858 0 .5.5 0 0 1-.5.5Z" />
+                </svg>
+                Agregar Proveedor
+            </button>
+        </div>
+            <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
+                <!-- Modal para Agregar (Registrar) -->
+                 
+       <!-- Fondo oscuro semitransparente -->
+<div id="modal-backdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+<!-- Modal -->
+<div id="crud-modal" tabindex="-1" aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-gray-100 rounded-lg shadow-sm dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-300 mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white text-center">
+                    Agregar Proveedor
+                </h3>
+                <button type="button"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="crud-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Cerrar modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form action="{{ url_for('Alumnos1') }}" method="POST" novalidate class="p-4 md:p-5">
+                {{ form.csrf_token }}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="grid gap-4 mb-4">
+                    <!-- Campo Nombre -->
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 text-left">
+                        Nombre
+                    </label>
+                    
+                    <div class="relative z-0 w-full group">
+                        {{ macros.campoNuevo(form.nombre, class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder=" ") }}
+                    </div>
+            
+                    <!-- Campo Teléfono -->
+                    <label for="telefono" class="text-sm font-medium text-gray-700 text-left">
+                        Teléfono
+                    </label>
+                    <div class="relative z-0 w-full group">
+                        {{ macros.campoNuevo(form.apaterno, class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder=" ") }}
+                    </div>
+            
+                    <!-- Campo Email -->
+                    <label for="email" class="text-sm font-medium text-gray-700 text-left">
+                        Email
+                    </label>
+                    <div class="relative z-0 w-full group">
+                        {{ macros.campoNuevo(form.email, class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder=" ") }}
+                    </div>
+                </div>
+                <!-- Botones del formulario -->
+                <div class="flex justify-center mt-6">
+                    <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Guardar
+                    </button>
+                    <button type="button" data-modal-hide="crud-modal"
+                        class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-2">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Fondo oscuro -->
+<div id="modal-backdrop-modificar" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+
+ 
+    <!-- Modal para Modificar -->
+    <div id="modificar-modal" tabindex="-1" aria-hidden="true"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Modificar Alumno
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="modificar-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Cerrar modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <form action="/modificar" method="POST" novalidate class="p-4 md:p-5">
+                    {{ form.csrf_token }}
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="id" value="{{ form.id.data }}">
+                
+                    <div class="grid gap-4 mb-4">
+                        <!-- Campo Nombre -->
+                        <label for="nombre" class="block text-sm font-medium text-gray-700 text-left">
+                            Nombre
+                        </label>
+                        <div class="relative z-0 w-full group">
+                            {{ macros.campoNuevo(form.nombre, class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder=" ") }}
+                        </div>
+                
+                        <!-- Campo Teléfono -->
+                        <label for="apaterno" class="text-sm font-medium text-gray-700 text-left">
+                            Teléfono
+                        </label>
+                        <div class="relative z-0 w-full group">
+                            {{ macros.campoNuevo(form.apaterno, class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder=" ") }}
+                        </div>
+                
+                        <!-- Campo Email -->
+                        <label for="email" class="text-sm font-medium text-gray-700 text-left">
+                            Email
+                        </label>
+                        <div class="relative z-0 w-full group">
+                            {{ macros.campoNuevo(form.email, class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder=" ") }}
+                        </div>
+                    </div>
+                
+                    <!-- Botones del formulario -->
+                    <div class="flex justify-center mt-6">
+                        <button type="submit"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Guardar cambios
+                        </button>
+                        <button type="button" data-modal-hide="modificar-modal"
+                            class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ml-2">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector('[data-modal-toggle="crud-modal"]').addEventListener('click', function () {
+            document.getElementById('modal-backdrop').classList.remove('hidden');
+            document.getElementById('crud-modal').classList.remove('hidden');
+        });
+        
+        document.querySelector('[data-modal-hide="crud-modal"]').addEventListener('click', function () {
+            document.getElementById('modal-backdrop').classList.add('hidden');
+            document.getElementById('crud-modal').classList.add('hidden');
+        });
+        
+        // Asegúrate de que el selector esté apuntando correctamente al botón para mostrar el modal de modificar
+        document.querySelector('[data-modal-toggle="modificar-modal"]').addEventListener('click', function () {
+            document.getElementById('modal-backdrop-modificar').classList.remove('hidden');
+            document.getElementById('modificar-modal').classList.remove('hidden');
+        });
+        
+        // Asegúrate de que el selector esté apuntando correctamente al botón para cerrar el modal de modificar
+        document.querySelector('[data-modal-hide="modificar-modal"]').addEventListener('click', function () {
+            document.getElementById('modal-backdrop-modificar').classList.add('hidden');
+            document.getElementById('modificar-modal').classList.add('hidden');
+        });
+        
+         
+    </script>
+    <div class="relative overflow-x-auto sm:rounded-lg ml-64">
+        <table class="w-[1000px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Nombre
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Telefono
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Email
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                       Estatus
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                       Acciones
+                     </th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for alum in alumno %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{alum.nombre}}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{alum.apaterno}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{alum.email}}
+                    </td>
+                    <td class="px-6 py-4">
+                        Activo
+                    </td>
+                    <td class="px-6 py-4 flex space-x-4">
+                        <a href="javascript:void(0)" 
+                           data-modal-target="modificar-modal" 
+                           data-modal-toggle="modificar-modal"
+                           onclick="prepararModificar('{{ alum.id }}', '{{ alum.nombre }}', '{{ alum.apaterno }}', '{{ alum.email }}')">
+                            <svg class="w-5 h-5 text-gray-800 dark:text-black" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                            </svg>
+                        </a>
+                        <a href="eliminar?id={{alum.id}}">
+                            <svg class="w-5 h-5 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                            </svg>
+                        </a>
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+              
+            </div>
+        </div>
+    <!-- Incluye Flowbite JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    
+    <!-- Script para manejar la modificación -->
+    <script>
+        function prepararModificar(id, nombre, apaterno, email) {
+            // Actualizar los campos del formulario de modificación
+            document.querySelector('form[action="/modificar"] input[name="id"]').value = id;
+            document.querySelector('form[action="/modificar"] input[name="nombre"]').value = nombre;
+            document.querySelector('form[action="/modificar"] input[name="apaterno"]').value = apaterno;
+            document.querySelector('form[action="/modificar"] input[name="email"]').value = email;
+        }
+    
+        // Asegurar que todos los modales se inicialicen correctamente
+        document.addEventListener('DOMContentLoaded', function() {
+            const modificarModal = document.getElementById('modificar-modal');
+            if (modificarModal) {
+                // Verificar si hay un ID para abrir el modal automáticamente
+                const urlParams = new URLSearchParams(window.location.search);
+                const idModificar = urlParams.get('id');
+                
+                if (idModificar && window.location.pathname.includes('/modificar')) {
+                    // Si estamos en la ruta de modificar y hay un ID, mostrar el modal
+                    const modal = new Flowbite.Modal(modificarModal);
+                    modal.show();
+                }
+            }
+        });
+    </script>
+    
+    {% endblock %}
+</body>
+
+</html>
